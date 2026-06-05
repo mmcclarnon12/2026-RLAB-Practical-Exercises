@@ -1,0 +1,34 @@
+[
+  {
+    "listing": "/BrianHelsel.html",
+    "items": [
+      "/code/BrianHelsel/template.html"
+    ]
+  },
+  {
+    "listing": "/JulianneClina.html",
+    "items": [
+      "/code/JulianneClina/template.html"
+    ]
+  },
+  {
+    "listing": "/code/BrianHelsel/BrianHelsel.html",
+    "items": []
+  },
+  {
+    "listing": "/code/JulianneClina/JulianneClina.html",
+    "items": []
+  },
+  {
+    "listing": "/attendees/JulianneClina/about.html",
+    "items": [
+      "/attendees/JulianneClina/code/template.html"
+    ]
+  },
+  {
+    "listing": "/attendees/BrianHelsel/about.html",
+    "items": [
+      "/attendees/BrianHelsel/code/template.html"
+    ]
+  }
+]

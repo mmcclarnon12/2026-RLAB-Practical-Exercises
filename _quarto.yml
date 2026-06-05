@@ -1,0 +1,21 @@
+project:
+  type: website
+
+website:
+  title: "2026 RLAB Practical Exercises"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: attendees.qmd
+        text: Attendees
+
+format:
+  html:
+    theme:
+      - lumen
+    css: styles.css
+    toc: true
+
+
+

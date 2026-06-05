@@ -1,0 +1,7 @@
+---
+title: "Attendees"
+---
+
+### [Brian Helsel](attendees/BrianHelsel/about.html)
+
+### [Julianne Clina](attendees/JulianneClina/about.html)

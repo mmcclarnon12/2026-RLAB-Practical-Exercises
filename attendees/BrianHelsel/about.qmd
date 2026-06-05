@@ -1,0 +1,26 @@
+---
+title: "Brian Helsel"
+listing:
+  contents: code
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+  image-placeholder: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+  image-height: 200px
+page-layout: full
+title-block-banner: true
+---
+
+<div class="profile">
+  <img src="https://brianhelsel.netlify.app/images/HelselBC.jpg">
+</div>
+
+**Professioal Background**
+
+Dr. Brian Helsel is an Assistant Professor with the University of Kansas
+Alzheimer's Disease Research Center in the Department of Neurology at the
+University of Kansas Medical Center. He has a background in exercise physiology
+and physical activity epidemiology and is interested in understanding the role
+of exercise for promoting brain health in adults with Down syndrome.
