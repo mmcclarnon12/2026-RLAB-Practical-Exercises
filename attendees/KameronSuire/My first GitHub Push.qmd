@@ -1,0 +1,22 @@
+---
+title: "The Whole Game Practice"
+subtitle: "My First GitHub Push"
+author: "Kameron Suire, PhD"
+date: 2026-06-24
+image: "https://github.com/KSuire47/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: true
+  message: false
+  warning: false
+---
+
+**Assignment**. Practice for Dr. Julianne Clina's introduction to R presentation. 
+This Quarto document will be used to practice my first GitHub pull request.
+
+```{r}
+# Hello R-LAB
+message("My first GitHub push worked!")
+x <- 1:10
+mean(x)
+```
