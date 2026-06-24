@@ -18,7 +18,7 @@ format:
     toc: true
 
 execute: 
-  freeze: auto
-
-
-
+  echo: true
+  eval: true
+  message: false
+  warning: false
