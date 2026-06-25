@@ -7,6 +7,7 @@ name: Quarto Publish
 
 jobs:
   build-deploy:
+    if: github.repository == 'bhelsel/2026-RLAB-Practical-Exercises'
     runs-on: ubuntu-latest
     permissions:
       contents: write
