@@ -1,0 +1,15 @@
+{
+  "hash": "4cb3c57aedf1f5fb796f8a11a8a786eb",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"The Whole Game Pracice\"\nsubtitle: \"My First GitHub Push\"\nauthor: Jessica Keller\ndate: 2026-06-24\nimage: \"https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png\"\nexecute: \n  echo: true\n  eval: true\n  message: false\n  warning: false\n---\n\n**Assignment**. Practice for Dr. Julianne Clina's introduction to R presentation. This Quarto document will be used to practice my first GitHub pull request\n\n::: {.cell}\n\n```{.r .cell-code}\n# Hello R-LAB\nmessage(\"My first GitHub push worked!\")\nx <- 1:10\nmean(x)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 5.5\n```\n\n\n:::\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

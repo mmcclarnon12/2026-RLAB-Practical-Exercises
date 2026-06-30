@@ -1,0 +1,10 @@
+{
+    "cSpell.enabled": false,
+    "[quarto]": {
+        "editor.defaultFormatter": "quarto.quarto"
+    },
+    "[r]": {
+        "editor.defaultFormatter": "Posit.air-vscode"
+    },
+    "editor.formatOnSave": true
+}

@@ -12,36 +12,9 @@ execute:
 ---
 
 **Assignment**. Practice for Dr. Julianne Clina's introduction to R presentation. This Quarto document will be used to practice my first GitHub pull request
-[{r}
+```{r}
 # Hello R-LAB
 message("My first GitHub push worked!")
 x <- 1:10
 mean(x)
-
-
-
-
-
-
-## Introduction to dplyr
-
-```{r}
-
-library(dplyr)
-
-starwars |>
-  mutate(name, bmi = mass / ((height / 100)^2)) |>
-  select(name:mass, bmi)
-
-```
-
-## Introduction to ggplot2
-
-```{r}
-
-library(ggplot2)
-
-ggplot(mpg, aes(displ, hwy, colour = class)) +
-  geom_point()
-
 ```

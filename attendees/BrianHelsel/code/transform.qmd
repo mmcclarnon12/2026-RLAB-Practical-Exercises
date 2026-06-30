@@ -1,0 +1,140 @@
+---
+title: "Transform"
+subtitle: "Practice using the dplyr functions with the nycflights13 data sets"
+author: "Brian Helsel, PhD"
+date: 2026-06-24
+image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: true
+  message: false
+  warning: false
+---
+
+**Assignment**. Practice using the dplyr functions with the nycflights13 data
+sets. The data sets contained in the nycflights13 package include flights,
+weather, planes, airports, and airlines.
+
+**To access each of the data sets in the nycflights13 R package**:
+
+```{r}
+#' If tidyverse is not installed:
+#' install.packages("tidyverse")
+
+# Load the package containing all the flight data
+library(nycflights13)
+```
+
+**To access one of the data sets**: 
+
+```{r}
+flights
+```
+
+**To view a description of the variables in a nycflights13 data set**: 
+
+```{r}
+#| eval: false
+
+?nycflights13::flights
+```
+
+## Filtering by Air Time
+
+Filter the flights data set by `air_time` and assign the results to a data set
+named flights. Filter the data to retrieve flights that are ≥ 2 hours and < 4
+hours.
+
+
+```{r}
+
+# Code here...
+
+```
+
+## Date and Time Variable
+
+Use the `year`, `month`, and `day` variable in the data set to create a `date`
+variable. Use this date variable to modify the `dep_time` and `arr_time` to
+create time stamps.
+
+```{r}
+
+# Code here...
+
+```
+
+**Hint**: Look at the `nycflights13::flights` documentation to review the format
+of the `dep_time` and `arr_time` variables. Zero padding can be added with
+`sprintf("%04d", x)` where `x` is the name of the variable.
+
+## Filtering by Flight Details
+
+Apply an additional filtering criteria that captures flights to the Orlando,
+Fort Lauderdale, and Miami airports from American Airlines, Delta Air Lines, and
+United Airlines.
+
+
+```{r}
+
+# Code here...
+
+```
+
+## Factor Variables
+
+Create a factor variable for `carrier` that includes American Airlines,
+Delta Air Lines, and United Airlines as the labels. Create another
+factor variable for `dest` that includes Orlando, Fort Lauderdale, and Miami.
+
+```{r}
+
+# Code here...
+
+```
+
+
+## Join Flights with Weather
+
+Join the `temp` and `wind_speed` variables from the weather data set to flights.
+You will need to select these variables first along with the **2 variables**
+that you need as identifers to merge with the flights data set.
+
+```{r}
+
+## Code here
+
+```
+
+## Run a Summary Table
+
+Execute the code below to view a table summarizing the destination, temperature,
+wind speed, time in the air, and distance by Airline carrier. The `gtsummary`
+package is excellent for building tables in R for presentations or manuscripts.
+Converting to a flextable allows more control over formatting for creating
+publication-ready tables.
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Install the gtsummary package if not already installed
+# install.packages("gtsummary")
+
+flights |>
+  dplyr::select(carrier, dest, temp, wind_speed, air_time, distance) |>
+  gtsummary::tbl_summary(
+    by = carrier,
+    missing = "no",
+    statistic = gtsummary::all_continuous() ~ "{mean} ± {sd}",
+    type = distance ~ "continuous",
+    label = list(
+      dest ~ "Destination",
+      temp ~ "Temperature",
+      wind_speed ~ "Wind Speed",
+      air_time ~ "Time in the Air",
+      distance ~ "Distance"
+    )
+  ) |>
+  gtsummary::as_flex_table()
+```
