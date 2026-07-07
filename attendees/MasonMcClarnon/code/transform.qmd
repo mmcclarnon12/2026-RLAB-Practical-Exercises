@@ -1,0 +1,168 @@
+---
+title: "Transform"
+subtitle: "Practice using the dplyr functions with the nycflights13 data sets"
+author: "Brian Helsel, PhD"
+date: 2026-07-01
+image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: true
+  message: false
+  warning: false
+---
+
+**Assignment**. Practice using the dplyr functions with the nycflights13 data
+sets. The data sets contained in the nycflights13 package include flights,
+weather, planes, airports, and airlines.
+
+**To access each of the data sets in the nycflights13 R package**:
+
+```{r load libraries}
+#' If tidyverse is not installed:
+#' install.packages("tidyverse")
+
+# Load the package containing all the flight data
+library(nycflights13)
+library(dplyr)
+```
+
+
+**To access one of the data sets**: 
+
+```{r view the flight data set}
+flights
+```
+
+**To view a description of the variables in a nycflights13 data set**: 
+
+```{r access the help documentation containing variable descriptions}
+#| eval: false
+?flights
+```
+
+## Filtering by Air Time
+
+Filter the flights data set by `air_time` and assign the results to a data set
+named flights. Filter the data to retrieve flights that are ≥ 2 hours and < 4
+hours.
+
+
+```{r filter by air time}
+
+# Code here...
+flights <- flights |>
+  dplyr::filter(air_time >= 120 & air_time < 240)
+```
+
+## Date and Time Variable
+
+Use the `year`, `month`, and `day` variable in the data set to create a `date`
+variable. Use this date variable to modify the `dep_time` and `arr_time` to
+create time stamps.
+
+```{r create date and time variables}
+
+flights <- flights |>
+  dplyr::mutate(
+    date = lubridate::make_date(year, month, day),
+    dplyr::across(
+      c(dep_time, arr_time),
+      ~ lubridate::ymd_hm(paste(date, sprintf("%04d", .x)))
+    )
+  )
+```
+
+**Hint**: Look at the `nycflights13::flights` documentation to review the format
+of the `dep_time` and `arr_time` variables. Zero padding can be added with
+`sprintf("%04d", x)` where `x` is the name of the variable.
+
+## Filtering by Flight Details
+
+Apply an additional filtering criteria that captures flights to the Orlando,
+Fort Lauderdale, and Miami airports from American Airlines, Delta Air Lines, and
+United Airlines.
+
+
+```{r filter by destination and carrier}
+
+flights <- flights |>
+  dplyr::filter(
+    dest %in% c("MCO", "FLL", "MIA") & carrier %in% c("AA", "DL", "UA")
+  )
+```
+
+## Factor Variables
+
+Create a factor variable for `carrier` that includes American Airlines,
+Delta Air Lines, and United Airlines as the labels. Create another
+factor variable for `dest` that includes Orlando, Fort Lauderdale, and Miami.
+
+```{r create factor variables}
+
+flights <- flights |>
+  dplyr::mutate(
+    dest = factor(
+      dest,
+      levels = c("MCO", "FLL", "MIA"),
+      labels = c(
+        "Orlando",
+        "Fort Lauderdale",
+        "Miami"
+      )
+    ),
+    carrier = factor(
+      carrier,
+      levels = c("AA", "DL", "UA"),
+      labels = c(
+        "American Airlines",
+        "Delta Air Lines",
+        "United Airlines"
+      )
+    )
+  )
+```
+
+
+## Join Flights with Weather
+
+Join the `temp` and `wind_speed` variables from the weather data set to flights.
+You will need to select these variables first along with the **2 variables**
+that you need as identifers to merge with the flights data set.
+
+```{r join with the weather data set}
+
+flights <- weather |>
+  dplyr::select(origin, time_hour, temp, wind_speed) |>
+  dplyr::inner_join(flights, by = c("origin", "time_hour"))
+```
+
+## Run a Summary Table
+
+Execute the code below to view a table summarizing the destination, temperature,
+wind speed, time in the air, and distance by Airline carrier. The `gtsummary`
+package is excellent for building tables in R for presentations or manuscripts.
+Converting to a flextable allows more control over formatting for creating
+publication-ready tables.
+
+```{r display final table}
+
+# Install the gtsummary package if not already installed
+# install.packages("gtsummary")
+
+flights |>
+  dplyr::select(carrier, dest, temp, wind_speed, air_time, distance) |>
+  gtsummary::tbl_summary(
+    by = carrier,
+    missing = "no",
+    statistic = gtsummary::all_continuous() ~ "{mean} ± {sd}",
+    type = distance ~ "continuous",
+    label = list(
+      dest ~ "Destination",
+      temp ~ "Temperature",
+      wind_speed ~ "Wind Speed",
+      air_time ~ "Time in the Air",
+      distance ~ "Distance"
+    )
+  ) |>
+  gtsummary::as_flex_table()
+```
