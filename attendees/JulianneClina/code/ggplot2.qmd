@@ -1,0 +1,121 @@
+---
+title: "Practical Exercise Template"
+subtitle: "Week 3"
+author: Julianne Clina, PhD
+date: 2026-07-08
+image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: true
+  message: false
+  warning: false
+---
+## loading packages
+```{r}
+
+library(tidyverse)
+library(palmerpenguins)
+ 
+names(penguins)
+```
+
+## Activity 1 Beginner Practice
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm, color = species)
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5), 
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+```
+
+## Activity 2 Intermdiate Practice
+
+```{r}
+theme_penguins <- function() {
+  theme_minimal() +
+    theme(
+      plot.title.position = "plot",
+      plot.title = element_text(hjust = 1),
+      plot.subtitle = element_text(hjust = 1),
+      legend.position = "bottom",
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "blue"),
+      axis.ticks = element_line(color = "blue")
+    )
+}
+
+  ggplot(
+  data = penguins,
+  mapping = aes(
+    x = flipper_length_mm,
+    y = body_mass_g,
+    color = species
+  )
+) +
+  geom_point() +
+  facet_wrap(~species) +
+  labs(
+    title = "Penguin body mass by flipper length",
+    subtitle = "Faceted by species",
+    x = "Flipper length (mm)",
+    y = "Body Mass (g)",
+    color = "Species"
+  ) +
+  theme_penguins()
+```
+
+## Activity 3 Advanced Practice 
+```{r}
+  cars_theme <- function() {
+  theme_classic() +
+    theme(
+      legend.position = "bottom",
+      plot.title = element_text(face = "bold"),
+      plot.subtitle = element_text(face = "italic")
+    )
+}
+
+ggplot(
+  data = mtcars,
+  mapping = aes(
+    x = hp,
+    y = mpg,
+    color = factor(cyl),
+    shape = factor(cyl)
+  )
+) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(
+    ~ am,
+    labeller = labeller(
+      am = c(
+        "0" = "Automatic",
+        "1" = "Manual"
+      )
+    )
+  ) +
+  labs(
+    title = "Fuel economy by horsepower",
+    subtitle = "Colored by number of cylinders and faceted by transmission",
+    x = "Horsepower",
+    y = "Miles per gallon (mpg)",
+    color = "Number of cylinders",
+    shape = "Number of cylinders"
+  ) +
+  cars_theme()
+
+```

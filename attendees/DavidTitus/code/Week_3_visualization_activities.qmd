@@ -1,22 +1,21 @@
 ---
 title: "ggplot2 Hands-On Practice"
-subtitle: "Adjust the YAML each week when doing a new exercise"
-author: Ashlyn Barry
+format: html
+author: "David Titus"
 date: 2026-07-08
 image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
 execute: 
   echo: true
-  eval: false
+  eval: true
   message: false
   warning: false
 ---
 
-**Assignment**. Gain practical hands-on experience creating visualizations in R
-using ggplot2.
-
-```{r setup}
+```{r setup, include=FALSE}
 library(tidyverse)
+install.packages("palmerpenguins", repos = "https://cloud.r-project.org")
 library(palmerpenguins)
+names(penguins)
 ```
 
 Time to apply what we learned! Work through the activity that matches your experience level. If you finish early, try the bonus question or move on to the next level!
@@ -31,22 +30,22 @@ species, using what you learned today.
 **Instructions:** Fill in the `___` blanks to complete the code. Run it and
 check that your plot displays correctly!
 
-```{r beginner}
+```{r beginner, eval=FALSE}
 ggplot(
-  ___ = penguins,
-  mapping = aes(x = bill_length_mm, y = ___, color = ___)
+  data = penguins,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm, color = species)
 ) +
-  ___() +
+  geom_point() +
   labs(
     title = "Bill length and bill depth by species",
     x = "Bill length (mm)",
-    y = "___",
-    color = "___"
+    y = "Bill Depth (mm)",
+    color = "Species"
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(___ = 0.5),
-    plot.subtitle = element_text(___ = 0.5)
+    plot.title = element_text(h = 0.5),
+    plot.subtitle = element_text(h = 0.5)
   )
 ```
 
@@ -84,11 +83,22 @@ may overlap the facets; adjust it to `"bottom"` instead
 **Bonus:** Try `facet_grid(sex ~ species)` instead of `facet_wrap(~ species)`.
 What changes? What does this tell you that the original plot didn't?
 
-```{r intermediate}
+```{r intermediate, eval=FALSE}
 # Facet plots from presentation - modify according to instructions above
+mytheme <- ggplot2::theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 1, face = "bold"), # hor. adjust title to center
+    plot.subtitle = element_text(hjust = 1, face = "bold"), # hor. adjust subtitle to center
+    legend.position = "bottom", # x, y from bottom-left corner on scale 0-1
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(color = "blue")
+  )
+
+
 ggplot(
   data = penguins,
-  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)
 ) +
   geom_point() +
   facet_wrap(~species) +
@@ -96,9 +106,12 @@ ggplot(
     title = "Penguin body mass by flipper length",
     subtitle = "Faceted by species",
     x = "Flipper length (mm)",
-    y = "Body Mass (g)"
-  )
+    y = "Body Mass (g)",
+    color = "species"
+  ) +
+  mytheme
 ```
+
 
 ---
 
@@ -135,7 +148,7 @@ efficiency differ by number of cylinders?*
 5. Applies a clean custom theme
 6. Has polished axis labels, a title, and a subtitle
 
-```{r advanced}
+```{r advanced, eval=FALSE}
 # Your code here!
 ```
 

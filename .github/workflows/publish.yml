@@ -32,7 +32,12 @@ jobs:
             any::tidyverse
             any::palmerpenguins
             any::gtsummary
-
+            any::flextable
+            any::nycflights13
+            any::DBI
+            any::RSQLite
+            any::rvest
+            any::janitor
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:

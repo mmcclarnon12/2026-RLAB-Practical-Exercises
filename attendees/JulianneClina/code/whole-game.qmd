@@ -1,0 +1,22 @@
+---
+title: "Practical Exercise Template"
+subtitle: "Week 1"
+author: Julianne Clina, PhD
+date: 2026-06-24
+image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: true
+  message: false
+  warning: false
+---
+
+Week 1 practical assignment
+
+
+```{r}
+message("My first GitHub Push worked!")
+
+x <- 1:10
+mean(x)
+```
