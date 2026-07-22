@@ -1,5 +1,5 @@
 ---
-title: "Practical Exercise Template"
+title: "Whole Game Practice"
 subtitle: "Week 1"
 author: Julianne Clina, PhD
 date: 2026-06-24

@@ -1,5 +1,5 @@
 ---
-title: "Practical Exercise Template"
+title: "ggplot 2 Practice"
 subtitle: "Week 3"
 author: Julianne Clina, PhD
 date: 2026-07-08
