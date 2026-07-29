@@ -1,0 +1,197 @@
+---
+title: "Communication"
+subtitle: "Creating Quarto Extensions"
+author: Morgan Brucks
+date: 2026-07-29
+image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
+execute: 
+  echo: true
+  eval: false
+  message: false
+  warning: false
+---
+
+**Assignment**. Create your own Quarto extension and practice what you have
+learned in the import, transform, visualize, and program chapters.
+
+## Create Your Own Quarto Extension
+
+1. Navigate to the **code** folder under your name in the **2026-RLAB-Practical-Exercises** folder.
+
+2. Create an **\_extensions** folder and a **rlab** folder inside extensions.
+
+3. Create an **\_extensions.yml** and **custom.css** file inside the **rlab** folder.
+
+4. Add the following yaml to **\_extensions.yml**:
+
+```yaml
+---
+title: RLAB Quarto Format
+author: Morgan Brucks
+contributes:
+  formats:
+    html: 
+      title-block-banner: true
+      theme: lumen
+      css: custom.css
+      embed-resources: true
+      date-format: long
+      code-copy: false
+---
+```
+
+5. Add the format and extension to the yaml of the `communication.qmd` file.
+
+```yaml
+---
+format:
+  rlab-html: default
+---
+```
+
+6. Copy the css from <a href="https://github.com/bhelsel/2026-RLAB-Practical-Exercises/tree/main/attendees/MorganBrucks/code/_extensions/rlab/custom.css">this custom.css file</a> into the **custom.css** file that you just created.
+
+7. *Optional*. Experiment with ths css styling in **custom.css** by changing the
+images, colors, font sizes, etc. to make it your own.
+
+## Data Science Review
+
+### Import Data
+
+In this exercise, you will create an in-memory DuckDB database, copy the
+nycflights13 datasets into it, and use dplyr to create a new data frame for
+analysis.
+
+**Step 1**
+
+Create an in-memory DuckDB database by:
+
+- Connecting to DuckDB with `DBI::dbConnect()`.
+- Using **":memory:"** as the database location.
+- Copying the nycflights13 datasets into the database with `dbplyr::copy_nycflights13()`.
+
+```{r}
+
+con <- DBI::dbConnect(duckdb::duckdb(), dbdir = ":memory:")
+
+dbplyr::copy_nycflights13(con)
+```
+
+**Step 2**
+
+Using the tables stored in DuckDB, create a new object named flights that:
+
+- Starts with the weather table.
+- Selects only the origin, time_hour, temp, and wind_speed columns.
+- Joins the flights table using both origin and time_hour as the matching variables.
+- Collects the resulting data into your R session using collect().
+
+After completing these steps, the flights object should contain the selected
+weather variables along with the matching flight information, ready for use in
+later exercises.
+
+```{r}
+
+# Code here...
+
+```
+
+## Write Your Own Filter Function
+
+Create a function named `custom_filter()` that filters a data frame based on a
+user-specified variable and value.
+
+Your function should have three arguments:
+
+- data: the data frame to filter.
+- filter_by: the variable to use for filtering.
+- value: the value to compare against.
+
+Inside the function:
+
+- Use `dplyr::filter()` to keep observations where the selected variable is
+greater than or equal to value.
+- Use embracing ({{ }}) so that filter_by accepts an unquoted column name.
+
+After writing your function, test it by creating a new object named
+filtered_flights that contains only rows where wind_speed is greater than or
+equal to 30 miles per hour.
+
+If your function is written correctly, you should be able to call it by
+supplying a data frame, an unquoted variable name, and a comparison value.
+
+```{r}
+
+# Code here...
+
+```
+
+## Write Your Own Visualization Function
+
+In this exercise, you will create a reusable function that produces a
+scatterplot using ggplot2. Your function should allow the user to choose the
+dataset, the variables to plot, and any optional arguments supported by
+ggplot2::geom_point().
+
+**Step 1**
+
+Create a function named `custom_visualization()` with four arguments:
+
+1. data: the data frame to plot.
+2. xvar: the variable to display on the x-axis.
+3. yvar: the variable to display on the y-axis.
+4. ... additional arguments that will be passed directly to `ggplot2::geom_point()`.
+
+**Step 2**
+
+Before creating the plot, remove any rows where both the x and y variables are missing (NA).
+
+- Use `dplyr::filter()`.
+- Inside filter(), use `dplyr::if_any()`.
+- Use embracing ({{ }}) so that the function accepts unquoted variable names.
+- The condition should only keep rows that do not have an NA.
+
+**Hint**: The expression inside if_any() should refer to the range from xvar to
+yvar, and the predicate should be is.na.
+
+**Step 3**
+
+Pipe the filtered data into `ggplot2::ggplot()`.
+
+Use ggplot2::aes() to map:
+
+- x to xvar
+- y to yvar
+- Remember to use embracing ({{ }}) for both variables.
+
+**Step 4**
+
+Add a scatterplot layer using `ggplot2::geom_point()`.
+
+Instead of specifying arguments like color or size yourself, forward all
+optional arguments using `...`. This allows users to customize the points by
+passing any arguments accepted by geom_point(), such as: color, size, shape,
+fill, alpha, stroke, etc.
+
+**Step 5**
+
+Test your function using the filtered_flights data frame. Create a scatterplot of:
+
+- temp on the x-axis
+- wind_speed on the y-axis
+
+Customize the points by passing several optional arguments through ..., for example:
+
+color = "blue"
+size = 4
+shape = 21
+stroke = 2
+fill = "red"
+
+If your function is written correctly, these arguments should be passed automatically to ggplot2::geom_point() without modifying the function itself.
+
+```{r}
+
+# Code here...
+
+```

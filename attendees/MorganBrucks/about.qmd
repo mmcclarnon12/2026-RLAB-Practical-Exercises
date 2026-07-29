@@ -1,7 +1,9 @@
 ---
 title: "Morgan Brucks"
 listing:
-  contents: code
+  contents: 
+    - code
+    - "!CommunicationSolutions.qmd"
   sort: "date desc"
   type: default
   categories: true

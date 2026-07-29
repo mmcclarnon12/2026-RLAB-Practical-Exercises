@@ -1,0 +1,105 @@
+---
+title: "Programming Solutions"
+author: "Julianne G. Clina"
+institute: "University of Kansas Medical Center"
+date: 2026-07-23
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-block-bg: true
+    theme: cosmo
+execute:
+  echo: true
+  eval: false
+---
+
+
+```{r}
+#| message: false
+library(tibble)
+library(dplyr)
+library(purrr)
+
+sleep_study <- tibble::tibble(
+  steps = rnorm(10, 8000, 1500),
+  sleep_hours = rnorm(10, 7, 1),
+  mood_score = rnorm(10, 50, 10),
+  memory_score = rnorm(10, 75, 8)
+)
+```
+
+## Tier 1: `f_to_c()`
+
+**Formula:** `C = (F - 32) * 5/9`
+
+Write a function called `f_to_c()` that converts a temperature in Fahrenheit to
+Celsius. Test it on `98.6` and `32`.
+
+```{r}
+f_to_c <- function(temp_f) {
+  (temp_f - 32) * 5/9
+}
+
+f_to_c(98.6)
+f_to_c(32)
+f_to_c(106)
+```
+
+---
+
+## Tier 2: `steps_to_miles()`
+
+**Formula:** `miles = steps * 2.5 / 5280` (average stride length of 2.5 ft,
+5,280 ft per mile)
+
+Write a function called `steps_to_miles()` that converts a step count to miles,
+with a `digits` argument (defaulting to 1) that controls how many decimal places
+the result is rounded to. Test it on `8000` steps with the default rounding, and
+again with `digits = 3`.
+
+```{r}
+steps_to_miles <- function(steps, digits = 1) {
+  miles <- steps * 2.5 / 5280   # step 1: convert to miles
+  round(miles, digits)          # step 2: round
+}
+
+steps_to_miles(8000)
+steps_to_miles(8000, digits = 0)
+
+```
+
+---
+
+## Tier 3: Apply `steps_to_miles()` with `purrr::map_dbl()`
+
+Use `purrr::map_dbl()` to apply `steps_to_miles()` to the vector of daily steps
+below, both on its own and as a new column in a data frame.
+
+```{r}
+daily_steps <- c(4200, 6100, 8000, 9800, 11500)
+
+purrr::map_dbl(daily_steps, steps_to_miles)
+
+tibble::tibble(steps = daily_steps) |>
+  dplyr::mutate(miles = purrr::map_dbl(steps, steps_to_miles))
+
+```
+
+### Stretch goal: forwarding `digits` through `map_dbl()`
+
+Any extra arguments added after the function name in `map_dbl()` get forwarded to
+that function for **every** element -- the same forwarding idea as `...` from
+Chapter 25.
+
+Repeat the `map_dbl()` calls above, but this time pass `digits = 3` through to
+`steps_to_miles()` for every element.
+
+```{r}
+purrr::map_dbl(daily_steps, steps_to_miles, digits = 3)
+
+tibble::tibble(steps = daily_steps) |>
+  dplyr::mutate(miles = purrr::map_dbl(steps, steps_to_miles, digits = 3))
+```
+
+

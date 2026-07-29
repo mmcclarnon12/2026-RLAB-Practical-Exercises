@@ -35,6 +35,7 @@ jobs:
             any::flextable
             any::nycflights13
             any::DBI
+            any::duckdb
             any::RSQLite
             any::rvest
             any::janitor
