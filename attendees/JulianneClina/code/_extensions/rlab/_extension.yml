@@ -1,0 +1,14 @@
+---
+title: RLAB Quarto Format
+author: Julianne Clina
+contributes:
+  formats:
+    html: 
+      title-block-banner: true
+      theme: lumen
+      css: custom.css
+      embed-resources: true
+      date-format: long
+      code-copy: false
+
+

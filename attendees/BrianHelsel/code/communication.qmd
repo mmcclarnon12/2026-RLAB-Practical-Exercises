@@ -4,12 +4,13 @@ subtitle: "Creating Quarto Extensions"
 author: Morgan Brucks
 date: 2026-07-29
 image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
-embed-resources: true
 execute: 
   echo: true
-  eval: false
+  eval: true
   message: false
   warning: false
+format:
+    rlab-html: default
 ---
 
 **Assignment**. Create your own Quarto extension and practice what you have

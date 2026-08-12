@@ -9,6 +9,7 @@ execute:
   eval: true
   message: false
   warning: false
+embed-resources: true
 format:
     rlab-html: default
 ---

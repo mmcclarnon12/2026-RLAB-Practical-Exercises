@@ -1,0 +1,64 @@
+/* Meta data */
+
+.quarto-title-meta-heading {
+  font-size: 22px !important;
+  font-family: 'Times New Roman', Times, serif;
+  color: #0C1F45;
+  font-weight: bold !important;
+  text-decoration: underline;
+}
+
+.quarto-title-meta-contents p {
+  font-size: 20px !important;
+  font-family: 'Times New Roman', Times, serif;
+  color: #000000;
+}
+
+/* Title Block */
+
+.quarto-title-block .quarto-title-banner {
+  background-image: url('https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png');
+  background-repeat: no-repeat; 
+  background-position: center;
+  background-size: 35%;
+  background-position: right;
+  width: 100%;
+  height: 44vh;
+  background-color: #0C1F45;
+}
+
+/* Fonts */
+
+h1.title {
+  font-size: 54px;
+  font-family: 'Times New Roman', Times, serif;
+  color: #ffffff !important;
+  height: 8vh;
+}
+
+p.subtitle {
+  color: #ffc82d !important;
+  font-size: 32px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+h2 {
+  font-size: 26px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bolder;
+  color: #0C1F45;
+}
+
+h3 {
+  font-size: 22px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bolder;
+  color: #008080;
+}
+
+pre.sourceCode {
+  background-color: #E6E6FA !important;
+  border: 1px solid #c9c9e8;
+  border-radius: 8px;
+  padding: 0px !important;
+}

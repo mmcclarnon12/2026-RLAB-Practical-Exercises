@@ -1,0 +1,11 @@
+title: RLAB Quarto Format
+author: Brian Helsel
+contributes:
+  formats:
+    html: 
+      title-block-banner: true
+      theme: lumen
+      css: custom.css
+      embed-resources: true
+      date-format: long
+      code-copy: false

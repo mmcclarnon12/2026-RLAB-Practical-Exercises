@@ -105,11 +105,6 @@ University of California San Francisco.
 Sadaf is an Associate Researcher with the Multiple Sclerosis Research Center at
 the Tehran University of Medical Sciences.
 
-### [Leela Shah](attendees/LeelaShah/about.html)
-
-Leela is a Graduate Student with the Waisman Center at the University of
-Wisconsin - Madison.
-
 ### [Keith Smith](attendees/KeithSmith/about.html)
 
 Keith is a Senior Research Associate with the University of Kansas Alzheimer's
