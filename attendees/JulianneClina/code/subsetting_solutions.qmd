@@ -1,0 +1,485 @@
+---
+title: "Subsetting in R Solutions"
+author: "Julianne G. Clina"
+institute: "University of Kansas Medical Center"
+date: 2026-08-26
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-block-bg: true
+    theme: cosmo
+execute:
+  echo: true
+  eval: false
+---
+
+## Learning Objectives
+
+By the end of this workshop, you should be able to:
+
+- Explain the difference between `[`, `[[`, and `$`, and know when to use each
+- Subset a data frame by rows and columns using `data[rows, columns]`
+- Explain the difference between **simplifying** and **preserving** subsetting
+- Build logical conditions with `==`, `>=`, `<`, `&`, `|`, and `!` to select rows
+- Combine multiple conditions (including with parentheses) to answer a realistic research question
+- Translate a plain-English data request into R subsetting code
+
+The core question to ask yourself throughout: **what information do I want, and where is it stored?**
+
+```{r}
+##Creating Example Dataset for practice!
+library(tidyverse)
+
+
+kids <- tibble(
+  id = sprintf("K%02d", 1:15),
+  age = c(
+    8,
+    9,
+    10,
+    8,
+    11,
+    12,
+    9,
+    10,
+    11,
+    8,
+    12,
+    9,
+    10,
+    11,
+    12
+  ),
+  sex = c(
+    "F",
+    "M",
+    "F",
+    "M",
+    "F",
+    "M",
+    "F",
+    "F",
+    "M",
+    "M",
+    "F",
+    "M",
+    "F",
+    "M",
+    "F"
+  ),
+  bmi_z = c(
+    -0.2,
+    0.8,
+    1.4,
+    -0.5,
+    2.1,
+    0.3,
+    1.1,
+    -0.8,
+    0.6,
+    1.8,
+    0.2,
+    1.3,
+    -0.1,
+    2.4,
+    0.9
+  ),
+  mvpa_min = c(
+    62,
+    41,
+    28,
+    75,
+    35,
+    54,
+    92,
+    67,
+    46,
+    22,
+    81,
+    38,
+    70,
+    31,
+    55
+  ),
+  sedentary_min = c(
+    510,
+    560,
+    610,
+    480,
+    590,
+    525,
+    450,
+    500,
+    545,
+    625,
+    470,
+    580,
+    495,
+    600,
+    530
+  ),
+  steps = c(
+    9200,
+    7100,
+    5400,
+    10400,
+    6300,
+    8100,
+    12000,
+    9800,
+    7600,
+    4900,
+    11000,
+    6800,
+    10100,
+    5700,
+    8300
+  ),
+  sbp = c(
+    102,
+    108,
+    115,
+    98,
+    121,
+    110,
+    105,
+    100,
+    112,
+    118,
+    107,
+    114,
+    103,
+    124,
+    109
+  ),
+  dbp = c(
+    64,
+    68,
+    72,
+    61,
+    76,
+    70,
+    66,
+    62,
+    69,
+    74,
+    67,
+    71,
+    65,
+    78,
+    68
+  ),
+  resting_hr = c(
+    82,
+    78,
+    88,
+    76,
+    91,
+    80,
+    75,
+    79,
+    84,
+    94,
+    77,
+    86,
+    74,
+    90,
+    81
+  ),
+  vo2peak = c(
+    42.1,
+    38.4,
+    34.2,
+    45.6,
+    31.8,
+    40.2,
+    47.1,
+    43.5,
+    37.9,
+    29.4,
+    44.8,
+    35.6,
+    46.2,
+    32.5,
+    39.7
+  )
+)
+
+kids$parent_info <- list(
+  list(mother = "Sarah", father = "James", contact = "email"),
+  list(mother = "Maria", father = "Carlos", contact = "phone"),
+  list(mother = "Jennifer", father = "David", contact = "email"),
+  list(mother = "Amanda", father = "Brian", contact = "phone"),
+  list(mother = "Rachel", father = "Michael", contact = "email"),
+  list(mother = "Lisa", father = "Robert", contact = "email"),
+  list(mother = "Emily", father = "Daniel", contact = "phone"),
+  list(mother = "Katie", father = "Andrew", contact = "email"),
+  list(mother = "Nicole", father = "Matthew", contact = "phone"),
+  list(mother = "Jessica", father = "Christopher", contact = "email"),
+  list(mother = "Laura", father = "Steven", contact = "phone"),
+  list(mother = "Michelle", father = "Kevin", contact = "email"),
+  list(mother = "Elizabeth", father = "Mark", contact = "email"),
+  list(mother = "Heather", father = "Jason", contact = "phone"),
+  list(mother = "Rebecca", father = "Thomas", contact = "email")
+)
+
+kids$mvpa_min[c(5, 12)] <- NA
+kids$sbp[9] <- NA
+kids$bmi_z[13] <- NA
+
+kids
+```
+
+---
+
+## Activity 1: `[`, `[[`, and `$`
+
+### Why three operators?
+
+R gives you three tools for pulling things out of an object, and they are **not interchangeable**:
+
+| Operator | What it returns | Typical use |
+|---|---|---|
+| `[`  | A **subset** of the same type/structure (can hold 0, 1, or many elements) | "Give me a smaller version of this object" |
+| `[[` | A **single element**, unwrapped from its container | "Give me the contents of this one slot" |
+| `$`  | A single **named** element (shorthand for `[[` with a name) | "Give me the column/element called ___" |
+
+A helpful mental picture from *Advanced R* (Wickham): if a list is a **train**, and each element is a **train car**, then:
+
+- `x[4:6]` gives you a smaller train made of cars 4 through 6 (still a train — a list)
+- `x[[5]]` opens car 5 and hands you what's *inside* it (not a train anymore)
+
+This is why `[` on a list always returns a list (even a list of length 1), while `[[` and `$` reach inside and hand you the actual object stored there.
+
+Our `parent_info` column is a **list-column** — each element of `kids$parent_info` is itself a list. It's a good place to see `[` vs `[[` vs `$` in action.
+
+### Step 1: Look at the list-column
+
+```{r}
+kids$parent_info
+```
+
+### Step 2: Extract one child's parent information
+
+Suppose we want the parent information for child 3.
+
+```{r}
+# [ ] extracts the third element as a length-1 list
+kids$parent_info[3]
+
+# [[ ]] extracts the third element itself (a named list, not wrapped in a list)
+kids$parent_info[[3]]
+
+class(kids$parent_info[3])
+class(kids$parent_info[[3]])
+```
+
+**What's different?** `[` keeps the "train car" wrapper — you get a list containing one list. `[[` unwraps it and gives you the list itself. This is the **simplify vs. preserve** distinction: `[[` simplifies (drops a layer of structure), `[` preserves it.
+
+### Step 3: Extract information within the list
+
+Now that we have the parent information for child 3, we want to extract just the mother's name. Because `parent_info[[3]]` is a *named* list, we can use `$` to grab a named piece of it.
+
+```{r}
+kids$parent_info[[3]]$mother
+```
+
+The key idea: these operators **chain together** to walk through nested objects — first `[[` to get into the list-column, then `$` to get the named element inside.
+
+---
+
+## Activity 2: Selecting Rows and Columns
+
+Data frames behave like a cross between a list (each column is an element) and a matrix (rows and columns). When subsetting with two indices, the pattern is:
+
+```r
+data[rows, columns]
+```
+
+- The first position (before the comma) says **which rows**
+- The second position (after the comma) says **which columns**
+- Leaving a position blank means "give me all of them"
+
+```{r}
+# All columns for child 5
+kids[5, ]
+
+# The mvpa_min column, for all children
+kids[, "mvpa_min"]
+```
+
+### Your turn
+
+Imagine you are preparing a small table for a research meeting. You want information for children 2, 5, 8, and 12 — but only the columns `id`, `age`, `sex`, `mvpa_min`, and `vo2peak`.
+
+```{r}
+# Select children 2, 5, 8, and 12
+# and keep only id, age, sex, mvpa_min, and vo2peak
+
+kids[
+  c(2, 5, 8, 12),
+  c("id", "age", "sex", "mvpa_min", "vo2peak")
+]
+```
+
+### Simplify vs. preserve: one more thing to notice
+
+Compare these two approaches to grabbing a single column:
+
+```{r}
+kids[, "mvpa_min"] # matrix-style: simplifies
+kids["mvpa_min"] # list-style: preserves
+```
+
+They select the same values, but return **different types of objects**:
+
+```{r}
+class(kids[, "mvpa_min"])
+class(kids["mvpa_min"])
+```
+
+`kids[, "mvpa_min"]` simplifies down to a plain vector, because you asked for it "matrix style" (row, column). `kids["mvpa_min"]` treats `kids` like a list and hands you back a smaller data frame with one column, preserving the original structure. This distinction is a common source of bugs — a function that works fine when you select multiple columns can break unexpectedly when only one column is selected, because the object type silently changes. (Tibbles were designed to avoid this: `kids[, "mvpa_min"]` on a tibble still returns a tibble, not a bare vector — try it and compare to a base `data.frame`.)
+
+---
+
+## Activity 3: Logical Subsetting
+
+So far we've selected rows by their *position* (row 5, rows 2/5/8/12). But in research data, we usually want to select rows by whether they meet a **condition** — "give me children who did X" rather than "give me row 7."
+
+This is where logical subsetting comes in. A logical condition like:
+
+```{r}
+kids$mvpa_min >= 60
+```
+
+produces a vector of `TRUE`, `FALSE`, and possibly `NA` — one value per row. When you put that logical vector inside `[`, R keeps only the rows where the value is `TRUE`, and returns `NA` for rows where the condition itself was `NA` (this is different from using `which()`, which silently drops `NA`s instead — worth knowing when you're not sure why your row counts don't match).
+
+### Your turn
+
+Find the children who get at least 60 minutes of MVPA. Return only `id`, `age`, `mvpa_min`, and `vo2peak`.
+
+```{r}
+# Select children with at least 60 minutes of MVPA
+# Keep only id, age, mvpa_min, and vo2peak
+
+kids[
+  kids$mvpa_min >= 60,
+  c("id", "age", "mvpa_min", "vo2peak")
+]
+```
+
+### Try another one
+
+Now find just the **IDs** of children who get less than 30 minutes of MVPA.
+
+```{r}
+# Select the IDs of children with MVPA < 30
+
+kids$id[kids$mvpa_min < 30]
+```
+
+Notice this time we're subsetting a **vector** (`kids$id`), not the whole data frame — same logical-subsetting idea, just applied outside the `data[rows, columns]` pattern.
+
+---
+
+## Activity 4: Combining Conditions
+
+Multiple logical conditions can be combined with:
+
+| Operator | Meaning |
+|---|---|
+| `&` | AND (both conditions must be TRUE) |
+| `|` | OR (at least one condition must be TRUE) |
+| `!` | NOT (flips TRUE/FALSE) |
+
+Always use the vectorized `&` and `|` here (not `&&` / `||`, which only compare a single value each and are meant for `if` statements).
+
+```{r}
+kids$mvpa_min >= 60 &
+  kids$bmi_z < 1
+```
+
+### Your turn
+
+Identify children who have **either** low physical activity (MVPA < 30 minutes) **or** high BMI z-score (≥ 2). Return `id`, `age`, `bmi_z`, `mvpa_min`.
+
+```{r}
+# Select children with either:
+#   MVPA < 30
+#   OR BMI z-score >= 2
+#
+# Keep id, age, bmi_z, and mvpa_min
+
+kids[
+  kids$mvpa_min < 30 |
+    kids$bmi_z >= 2,
+  c("id", "age", "bmi_z", "mvpa_min")
+]
+```
+
+### Add another condition
+
+Now restrict to **girls** who meet either of those criteria:
+
+> Female AND (low MVPA OR high BMI z-score)
+
+```{r}
+# Select girls who either:
+#   have MVPA < 30
+#   OR have BMI z-score >= 2
+#
+# Keep id, age, sex, bmi_z, and mvpa_min
+
+kids[
+  kids$sex == "F" &
+    (kids$mvpa_min < 30 | kids$bmi_z >= 2),
+  c("id", "age", "sex", "bmi_z", "mvpa_min")
+]
+```
+
+**Why the parentheses matter:** without them, R would evaluate `&` before `|` in a way that changes the meaning of the statement (operator precedence). The parentheses force the OR condition to be evaluated as a single unit before it's combined with the AND. When in doubt, use parentheses to make your intent explicit — even when they're not strictly required, they make code easier for you (and others) to read later.
+
+---
+
+## Activity 5: Putting It All Together
+
+Your PI sends you this request:
+
+> "Can you give me the ID, age, sex, MVPA, BMI z-score, and systolic blood pressure for girls who either get less than 30 minutes of MVPA or have a BMI z-score of 2 or greater? Please exclude anyone with missing systolic blood pressure."
+
+Before writing any code, translate the request into pieces.
+
+**Which rows do we want?**
+
+- Girls
+- AND either: MVPA < 30, OR BMI z-score ≥ 2
+- AND systolic BP is not missing
+
+**Which columns do we want?**
+
+- id, age, sex, mvpa_min, bmi_z, sbp
+
+### Your turn
+
+```{r}
+# Your code here
+
+kids[
+  kids$sex == "F" &
+    (kids$mvpa_min < 30 | kids$bmi_z >= 2) &
+    !is.na(kids$sbp),
+  c(
+    "id",
+    "age",
+    "sex",
+    "mvpa_min",
+    "bmi_z",
+    "sbp"
+  )
+]
+```
+
+Notice `!is.na(kids$sbp)` — `is.na()` returns `TRUE` where a value is missing, so `!is.na()` flips that to `TRUE` where a value is **not** missing (i.e., where you want to keep the row).
+
+---
